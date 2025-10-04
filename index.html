@@ -1,0 +1,40 @@
+<!-- index.html (前端) -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>我的網站首頁</title>
+</head>
+<body>
+  <h1>歡迎來到我的網站</h1>
+  <form id="uploadForm">
+    <input type="file" id="fileInput" />
+    <button type="submit">上傳檔案</button>
+  </form>
+  <p id="result"></p>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById('fileInput');
+      if (fileInput.files.length === 0) {
+        alert('請選擇檔案');
+        return;
+      }
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+
+      try {
+        const res = await fetch('https://your-render-backend-url/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        document.getElementById('result').textContent = data.message;
+      } catch (error) {
+        document.getElementById('result').textContent = '上傳失敗';
+      }
+    };
+  </script>
+</body>
+</html>
